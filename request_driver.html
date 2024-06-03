@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Замовити Водія</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Замовити Тверезого Водія</h1>
+    <form method="POST">
+        <label for="name">Ім'я:</label>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="phone">Телефон:</label>
+        <input type="tel" id="phone" name="phone" value="+380" pattern="^\+380\d{9}$" required><br>
+        
+        <label for="style">Стиль їзди:</label>
+        <select id="style" name="style">
+            <option value="Обережна їзда (або дитина в авто)">Обережна їзда (або дитина в авто)</option>
+            <option value="Динамічна їзда">Динамічна їзда</option>
+            <option value="Драйвова їзда">Драйвова їзда</option>
+        </select><br>
+        
+        <label for="map">Місцезнаходження:</label>
+        <div id="map" style="height: 400px; width: 100%;"></div><br>
+        
+        <input type="hidden" id="latitude" name="latitude" readonly>
+        <input type="hidden" id="longitude" name="longitude" readonly>
+        
+        <button type="button" onclick="getLocation()">Отримати геолокацію</button><br><br>
+        
+        <button type="submit">Відправити</button>
+    </form>
+</body>
+</html>
